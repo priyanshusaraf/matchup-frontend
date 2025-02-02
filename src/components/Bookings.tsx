@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,58 +7,42 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Animated,
-  Easing,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Bookings = ({ navigation }: any) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // For fade-in animation
-
-  // Fade-in animation for the page
-  React.useEffect(() => {
-    console.log('Bookings page loaded');
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      easing: Easing.out(Easing.exp),
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
   const turfs = [
     {
       id: 1,
-      name: 'Greenfield Arena',
-      location: 'Pitch 1 | 17/08/2023',
+      name: 'Greenfield Arena - Topsia',
+      location: '34b topsia park, sky arena kolkata - 700012',
+      reviews: '4.5/5',
+      distance: '200m away',
       image: require('../assets/images/download.jpg'),
     },
     {
       id: 2,
-      name: 'Ace Courts',
-      location: 'Court 3 | 19/09/2023',
+      name: 'Greenfield Arena - Topsia',
+      location: '34b topsia park, sky arena kolkata - 700012',
+      reviews: '4.5/5',
+      distance: '1km away',
       image: require('../assets/images/download1.jpg'),
-    },
-    {
-      id: 3,
-      name: 'Hoops Haven',
-      location: 'Court 5 | 19/09/2023',
-      image: require('../assets/images/images.jpg'),
-    },
-    {
-      id: 4,
-      name: 'Spike Beach',
-      location: 'Court 2 | 22/09/2023',
-      image: require('../assets/images/images1.jpg'),
     },
   ];
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+    <View style={styles.container}>
       <ScrollView>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.welcome}>Welcome, Player!</Text>
-          <Text style={styles.title}>Find Turfs Near You</Text>
+          <View>
+            <Text style={styles.greeting}>Good Morning</Text>
+            <Text style={styles.name}>Adrian</Text>
+          </View>
+          <View style={styles.headerIcons}>
+            <Icon name="bell" size={20} color="#fff" style={styles.icon} />
+            <Icon name="bars" size={24} color="#fff" />
+          </View>
         </View>
 
         {/* Search Bar */}
@@ -69,222 +53,235 @@ const Bookings = ({ navigation }: any) => {
             placeholderTextColor="#A9A9A9"
           />
           <TouchableOpacity style={styles.searchButton}>
-            <Text style={styles.searchButtonText}>🔍</Text>
+            <Icon name="search" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
 
-        {/* Featured Turfs */}
-        <Text style={styles.sectionTitle}>Featured Turfs</Text>
-        {turfs.slice(0, 2).map((turf) => (
-          <TouchableOpacity
-            key={turf.id}
-            style={styles.featuredCard}
-            onPress={() => {
-              console.log(`Navigating to BookTurf with: ${turf.name}, ${turf.location}`);
-              navigation.navigate('BookTurf', {
-                turfName: turf.name,
-                turfLocation: turf.location,
-              });
-            }}
-          >
-            <Image source={turf.image} style={styles.featuredImage} />
-            <View style={styles.featuredInfo}>
-              <Text style={styles.featuredTitle}>{turf.name}</Text>
-              <Text style={styles.featuredDetails}>{turf.location}</Text>
-              <View style={styles.bookButton}>
-                <Text style={styles.bookButtonText}>Book</Text>
+        {/* Upcoming Tournaments */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Upcoming Tournaments</Text>
+          <View style={styles.tournamentCard}>
+            <View style={styles.tournamentHeader}>
+              <View style={styles.teamColors}>
+                <View style={[styles.circle, { backgroundColor: '#E53935' }]} />
+                <View style={[styles.circle, { backgroundColor: '#1E88E5' }]} />
+              </View>
+              <Text style={styles.tournamentText}>Red Devils vs V. Blues</Text>
+              <Icon name="ellipsis-h" size={20} color="#777" />
+            </View>
+            <View style={styles.tournamentDetails}>
+              <View style={styles.tournamentItem}>
+                <Icon name="calendar" size={16} color="#777" />
+                <Text style={styles.tournamentItemText}>9 May 2021</Text>
+              </View>
+              <View style={styles.tournamentItem}>
+                <Icon name="trophy" size={16} color="#777" />
+                <Text style={styles.tournamentItemText}>Champions League</Text>
               </View>
             </View>
-          </TouchableOpacity>
-        ))}
-
-        {/* Available Turfs */}
-        <Text style={styles.sectionTitle}>Available Turfs</Text>
-        <View style={styles.availableContainer}>
-          {turfs.slice(2).map((turf) => (
-            <TouchableOpacity
-              key={turf.id}
-              style={styles.availableCard}
-              onPress={() => {
-                console.log(`Navigating to BookTurf with: ${turf.name}, ${turf.location}`);
-                navigation.navigate('BookTurf', {
-                  turfName: turf.name,
-                  turfLocation: turf.location,
-                });
-              }}
-            >
-              <Image source={turf.image} style={styles.availableImage} />
-              <Text style={styles.availableTitle}>{turf.name}</Text>
-              <Text style={styles.availableDetails}>{turf.location}</Text>
-              <View style={styles.bookButton}>
-                <Text style={styles.bookButtonText}>Book</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          </View>
         </View>
 
-        {/* Filter Section */}
-        <Text style={styles.sectionTitle}>Filter by Sport</Text>
-        <View style={styles.filterContainer}>
-          {['Soccer', 'Tennis', 'Basketball', 'Volleyball', 'Cricket'].map(
-            (sport, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.filterButton}
-                onPress={() => console.log(`Filter by: ${sport}`)}
-              >
-                <Text style={styles.filterText}>{sport}</Text>
-              </TouchableOpacity>
-            )
-          )}
+        {/* Turfs */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Turfs</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {turfs.map((turf) => (
+              <View key={turf.id} style={styles.turfCard}>
+                <Image source={turf.image} style={styles.turfImage} />
+                <Text style={styles.turfTitle}>{turf.name}</Text>
+                <Text style={styles.turfDetails}>{turf.location}</Text>
+                <Text style={styles.turfDetails}>
+                  Reviews: {turf.reviews} | {turf.distance}
+                </Text>
+                <TouchableOpacity
+                  style={styles.bookButton}
+                  onPress={() =>
+                    navigation.navigate('BookTurf', {
+                      turfName: turf.name,
+                      turfLocation: turf.location,
+                    })
+                  }
+                >
+                  <Text style={styles.bookButtonText}>BOOK</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Games */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>What do you feel like playing today?</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {[{ id: 1, name: 'Cricket Smash', image: require('../assets/images/cricket.jpg') },
+            { id: 2, name: 'Pickleball Madness', image: require('../assets/images/pickleball.jpeg') },
+            { id: 3, name: 'Sweet Volley', image: require('../assets/images/volleyball.png') }].map((game) => (
+              <View key={game.id} style={styles.gameCard}>
+                <Image source={game.image} style={styles.gameImage} />
+                <Text style={styles.gameTitle}>{game.name}</Text>
+                <Text style={styles.gameDetails}>5 people interested near you</Text>
+              </View>
+            ))}
+          </ScrollView>
         </View>
       </ScrollView>
-    </Animated.View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5fcff',
+    backgroundColor: '#f5f5f5',
   },
   header: {
+    backgroundColor: '#3E82FC',
     padding: 20,
-    backgroundColor: '#8FCB81',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    marginBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  welcome: {
+  greeting: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#fff',
   },
-  title: {
-    fontSize: 28,
+  name: {
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: '#fff',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 15,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    marginHorizontal: 20,
+    marginTop: -15,
+    elevation: 5,
   },
   searchInput: {
     flex: 1,
-    height: 50,
-    borderWidth: 0,
-    borderRadius: 25,
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 15,
-    elevation: 5,
-    marginRight: 10,
+    height: 40,
+    fontSize: 16,
+    color: '#333',
   },
   searchButton: {
-    backgroundColor: '#8FCB81',
-    padding: 15,
-    borderRadius: 25,
-    elevation: 5,
+    backgroundColor: '#3E82FC',
+    padding: 10,
+    borderRadius: 15,
   },
-  searchButtonText: {
-    fontSize: 16,
-    color: '#ffffff',
+  section: {
+    padding: 20,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    paddingHorizontal: 20,
-    marginBottom: 10,
-  },
-  featuredCard: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    marginHorizontal: 20,
-    marginBottom: 20,
-    elevation: 5,
-  },
-  featuredImage: {
-    width: 120,
-    height: 120,
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
-  },
-  featuredInfo: {
-    flex: 1,
-    padding: 10,
-    justifyContent: 'center',
-  },
-  featuredTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
-  },
-  featuredDetails: {
-    fontSize: 14,
-    color: '#777',
     marginBottom: 10,
   },
-  bookButton: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    alignSelf: 'flex-start',
-  },
-  bookButtonText: {
-    fontSize: 14,
-    color: '#ffffff',
-  },
-  availableContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  availableCard: {
-    width: '48%',
-    backgroundColor: '#ffffff',
-    borderRadius: 15,
-    marginBottom: 20,
+  tournamentCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
     elevation: 5,
+    marginBottom: 15,
+  },
+  tournamentHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
-    overflow: 'hidden',
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
-  availableImage: {
-    width: '100%',
-    height: 120,
+  teamColors: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  availableTitle: {
+  circle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 5,
+  },
+  tournamentText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
-    marginTop: 10,
   },
-  availableDetails: {
-    fontSize: 12,
-    color: '#777',
-    marginBottom: 10,
-  },
-  filterContainer: {
+  tournamentDetails: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: 20,
+    justifyContent: 'space-between',
   },
-  filterButton: {
-    backgroundColor: '#ffffff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 30,
+  tournamentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tournamentItemText: {
+    marginLeft: 5,
+    color: '#777',
+  },
+  turfCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
     marginRight: 10,
-    marginBottom: 10,
+    padding: 10,
+    width: 200,
     elevation: 5,
   },
-  filterText: {
-    fontSize: 14,
-    color: '#333',
+  turfImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  turfTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
+  },
+  turfDetails: {
+    color: '#777',
+    marginBottom: 5,
+  },
+  bookButton: {
+    backgroundColor: '#3E82FC',
+    paddingVertical: 8,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  bookButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  gameCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    width: 150,
+    elevation: 5,
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  gameImage: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+  gameTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  gameDetails: {
+    fontSize: 12,
+    color: '#777',
+    textAlign: 'center',
   },
 });
 

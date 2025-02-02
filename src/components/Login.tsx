@@ -1,86 +1,176 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Login = ({ navigation }: any) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Main')}
-      >
-        <Text style={styles.buttonText}>Login</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Back Button */}
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Icon name="arrow-left" size={24} color="#4CAF50" />
       </TouchableOpacity>
-      <Text style={styles.registerText}>
-        Don’t have an account?{' '}
-        <Text
-          style={styles.registerLink}
-          onPress={() => navigation.navigate('Register')}
-        >
-          Register here
-        </Text>
+
+      {/* Title and Subtitle */}
+      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.subtitle}>
+        Welcome back! Enter your credentials to continue.
       </Text>
-    </View>
+
+      {/* Username Input */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Username</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your username"
+          value={username}
+          onChangeText={setUsername}
+        />
+      </View>
+
+      {/* Password Input */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Password</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your password"
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)}
+            style={styles.iconContainer}
+          >
+            <Icon
+              name={showPassword ? 'eye-slash' : 'eye'}
+              size={20}
+              color="#4CAF50"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Login Button */}
+      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Main')}>
+        <Text style={styles.loginButtonText}>LOGIN</Text>
+      </TouchableOpacity>
+
+      {/* Forgot Password */}
+      <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
+        <Text style={styles.forgotPasswordText}>Forgot password? Reset here</Text>
+      </TouchableOpacity>
+
+      {/* Sign-Up Redirect */}
+      <TouchableOpacity
+        style={styles.signUpRedirectButton}
+        onPress={() => navigation.navigate('Register')}
+      >
+        <Text style={styles.signUpRedirectButtonText}>Don't have an account? Create one</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    flexGrow: 1,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 20,
+    backgroundColor: '#f9f9f9',
+    padding: 20,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#4CAF50',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  subtitle: {
+    textAlign: 'center',
+    color: '#555555',
     marginBottom: 30,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    color: '#888888',
+    marginBottom: 5,
   },
   input: {
     width: '100%',
     height: 50,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 10,
-    marginBottom: 20,
-    paddingHorizontal: 15,
-    backgroundColor: '#F9F9F9',
+    borderBottomWidth: 2,
+    borderBottomColor: '#4CAF50',
+    fontSize: 16,
+    color: '#333333',
+    paddingHorizontal: 5,
   },
-  button: {
-    backgroundColor: '#8FCB81',
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  iconContainer: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },
+  loginButton: {
+    backgroundColor: '#4CAF50',
     width: '100%',
     paddingVertical: 15,
-    borderRadius: 10,
+    borderRadius: 30,
     alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 2, height: 2 },
+    shadowRadius: 5,
   },
-  buttonText: {
+  loginButtonText: {
+    fontSize: 18,
     color: '#ffffff',
     fontWeight: 'bold',
   },
-  registerText: {
-    marginTop: 15,
-    color: '#7d7d7d',
-  },
-  registerLink: {
-    color: '#8FCB81',
+  forgotPasswordText: {
+    fontSize: 14,
+    color: '#4CAF50',
     fontWeight: 'bold',
+    marginTop: 15,
+    textAlign: 'center',
+  },
+  signUpRedirectButton: {
+    marginTop: 20,
+  },
+  signUpRedirectButtonText: {
+    fontSize: 14,
+    color: '#4CAF50',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

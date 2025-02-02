@@ -6,17 +6,39 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Animated,
+  Easing,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const BookTurf = ({ route, navigation }: any) => {
   const { turfName, turfLocation } = route.params;
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+  // Fade-in animation for the page
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.out(Easing.exp),
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <Animated.ScrollView style={[styles.container, { opacity: fadeAnim }]}>
+      {/* Back Button */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Icon name="arrow-left" size={24} color="#fff" />
+      </TouchableOpacity>
+
       {/* Map Section */}
       <View style={styles.mapContainer}>
         <Image
-          source={require('../assets/images/download2.png')} // Replace with a real map or placeholder
+          source={require('../assets/images/download2.png')}
           style={styles.map}
         />
         <View style={styles.mapDetails}>
@@ -63,37 +85,47 @@ const BookTurf = ({ route, navigation }: any) => {
       <View style={styles.footer}>
         <Text style={styles.price}>$20 / hour</Text>
         <TouchableOpacity
-  style={styles.bookButton}
-  onPress={() =>
-    navigation.navigate('SelectDateTime', {
-      turfName, // Pass the turf name to the next screen
-    })
-  }
->
-  <Text style={styles.bookButtonText}>Book Court</Text>
-</TouchableOpacity>
-
+          style={styles.bookButton}
+          onPress={() =>
+            navigation.navigate('SelectDateTime', {
+              turfName,
+            })
+          }
+        >
+          <Text style={styles.bookButtonText}>Book Court</Text>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </Animated.ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f5f5f5',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
+    backgroundColor: '#3E82FC',
+    padding: 10,
+    borderRadius: 20,
+    elevation: 5,
   },
   mapContainer: {
-    position: 'relative',
-    height: 200,
+    height: 250,
   },
   map: {
     width: '100%',
-    height: '150%',
+    height: '100%',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   mapDetails: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 20,
     left: 20,
     backgroundColor: '#ffffff',
     borderRadius: 10,
@@ -112,43 +144,43 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   turfName: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#333333',
+    color: '#3E82FC',
+    marginBottom: 10,
   },
   ratingContainer: {
-    backgroundColor: '#8FCB81',
+    backgroundColor: '#FFD700',
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
     alignSelf: 'flex-start',
-    marginVertical: 60,
+    marginBottom: 20,
   },
   rating: {
     fontSize: 14,
-    color: '#ffffff',
+    color: '#fff',
     fontWeight: 'bold',
   },
   description: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#555555',
-    marginVertical: 20,
-    lineHeight: 20,
+    marginBottom: 20,
+    lineHeight: 22,
   },
   featuresContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginTop: 20,
   },
   feature: {
     width: '48%',
     backgroundColor: '#f9f9f9',
-    padding: 10,
+    padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     alignItems: 'center',
-    elevation: 2,
+    elevation: 3,
   },
   featureTitle: {
     fontSize: 12,
@@ -169,15 +201,16 @@ const styles = StyleSheet.create({
     borderColor: '#eeeeee',
   },
   price: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333333',
   },
   bookButton: {
-    backgroundColor: '#8FCB81',
-    borderRadius: 20,
+    backgroundColor: '#3E82FC',
+    borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 30,
+    elevation: 5,
   },
   bookButtonText: {
     color: '#ffffff',

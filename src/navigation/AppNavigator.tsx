@@ -44,6 +44,7 @@ const AppNavigator = () => (
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="BookTurf" component={BookTurf} />
       <Stack.Screen name="SelectDateTime" component={SelectDateTime} />
+      <Tab.Screen name="MyBookings" component={MyBookings} />
       <Stack.Screen name="Main" component={TabNavigator} />
     </Stack.Navigator>
   </NavigationContainer>

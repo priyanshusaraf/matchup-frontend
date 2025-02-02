@@ -1,32 +1,39 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Home = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Book a Squash Court</Text>
-      <Text style={styles.subtitle}>
-        Challenge your friend and play together a game of squash.
-      </Text>
       <Image
-        source={require('../assets/images/squash-player.png')}
-        style={styles.image}
+        source={require('../assets/images/logo.png')} // Replace with your logo
+        style={styles.logo}
       />
+      <Text style={styles.welcomeText}>Welcome to</Text>
+      <Text style={styles.appName}>MATCHUP</Text>
       <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Register')}
+        style={[styles.button, styles.emailButton]}
+        onPress={() => navigation.navigate('Login')}
       >
-        <Text style={styles.buttonText}>Sign up for an account</Text>
+        <Icon name="envelope" size={18} color="#fff" style={styles.icon} />
+        <Text style={styles.buttonText}>Login With Email</Text>
       </TouchableOpacity>
-      <Text style={styles.loginText}>
-        Already a member?{' '}
-        <Text
-          style={styles.loginLink}
-          onPress={() => navigation.navigate('Login')}
-        >
-          Log in
+      <TouchableOpacity
+        style={[styles.button, styles.facebookButton]}
+        onPress={() => navigation.navigate('Login')}
+      >
+        <Icon name="facebook" size={18} color="#fff" style={styles.icon} />
+        <Text style={styles.buttonText}>Login With Facebook</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, styles.googleButton]}
+        onPress={() => navigation.navigate('Login')}
+      >
+        <Icon name="google" size={18} color="#000" style={styles.icon} />
+        <Text style={[styles.buttonText, styles.googleButtonText]}>
+          Login With Google
         </Text>
-      </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -39,41 +46,51 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 30,
   },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
+  welcomeText: {
+    fontSize: 18,
     color: '#7d7d7d',
+    marginBottom: 5,
   },
-  image: {
-    width: 250,
-    height: 220,
+  appName: {
+    fontSize: 22,
+    fontWeight: 'bold',
     marginBottom: 30,
   },
   button: {
-    backgroundColor: '#8FCB81',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
     paddingVertical: 15,
-    paddingHorizontal: 40,
     borderRadius: 30,
-    marginBottom: 20,
+    marginBottom: 15,
+  },
+  emailButton: {
+    backgroundColor: '#4CAF50',
+  },
+  facebookButton: {
+    backgroundColor: '#3B5998',
+  },
+  googleButton: {
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#dcdcdc',
   },
   buttonText: {
-    color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+    marginLeft: 10,
   },
-  loginText: {
-    fontSize: 14,
-    color: '#7d7d7d',
-  },
-  loginLink: {
+  googleButtonText: {
     color: '#000',
-    fontWeight: 'bold',
+  },
+  icon: {
+    marginRight: 10,
   },
 });
 

@@ -5,8 +5,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  Animated,
+  Easing,
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SelectDateTime = ({ route, navigation }: any) => {
   const { turfName } = route.params;
@@ -25,6 +28,18 @@ const SelectDateTime = ({ route, navigation }: any) => {
     '20:00',
   ]);
 
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+  // Fade-in animation for the page
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.out(Easing.exp),
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
   const handleConfirmBooking = () => {
     if (!selectedDate || !selectedTime) {
       alert('Please select a date and time to proceed.');
@@ -34,12 +49,19 @@ const SelectDateTime = ({ route, navigation }: any) => {
     console.log(
       `Booking confirmed for ${turfName} on ${selectedDate} at ${selectedTime}`
     );
-    // Perform booking logic here
-    navigation.goBack(); // Navigate back or to a confirmation page
+    navigation.navigate('MyBookings'); // Navigate back or to a confirmation page
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+      {/* Back Button */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Icon name="arrow-left" size={24} color="#fff" />
+      </TouchableOpacity>
+
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Book {turfName}</Text>
@@ -54,13 +76,17 @@ const SelectDateTime = ({ route, navigation }: any) => {
         markedDates={{
           [selectedDate]: {
             selected: true,
-            selectedColor: '#8FCB81',
+            selectedColor: '#3E82FC',
           },
         }}
         theme={{
-          todayTextColor: '#8FCB81',
-          arrowColor: '#8FCB81',
+          todayTextColor: '#3E82FC',
+          arrowColor: '#3E82FC',
+          textDayFontWeight: 'bold',
+          textMonthFontWeight: 'bold',
+          textDayHeaderFontWeight: 'bold',
         }}
+        style={styles.calendar}
       />
 
       {/* Available Time Slots */}
@@ -107,26 +133,42 @@ const SelectDateTime = ({ route, navigation }: any) => {
       >
         <Text style={styles.confirmButtonText}>Confirm Booking</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f5f5f5',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
+    backgroundColor: '#3E82FC',
+    padding: 10,
+    borderRadius: 20,
+    elevation: 5,
   },
   header: {
     padding: 20,
-    backgroundColor: '#8FCB81',
+    backgroundColor: '#3E82FC',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+    alignItems: 'center',
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#ffffff',
     textAlign: 'center',
+  },
+  calendar: {
+    margin: 20,
+    borderRadius: 10,
+    elevation: 3,
   },
   timeSlotsHeader: {
     fontSize: 18,
@@ -136,7 +178,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   timeSlot: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#ffffff',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -144,9 +186,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+    elevation: 3,
   },
   timeSlotSelected: {
-    backgroundColor: '#8FCB81',
+    backgroundColor: '#3E82FC',
   },
   timeSlotText: {
     fontSize: 16,
@@ -157,12 +200,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   confirmButton: {
-    backgroundColor: '#8FCB81',
+    backgroundColor: '#3E82FC',
     borderRadius: 25,
     paddingVertical: 15,
     margin: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 5,
   },
   confirmButtonText: {
     fontSize: 18,
